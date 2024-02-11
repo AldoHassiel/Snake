@@ -11,10 +11,10 @@ namespace Snake
         {
             Console.Title = "Snake";
             Vector2D pantalla;
-            //pantalla.x = 51;
-            //pantalla.y = 21;
-            pantalla.x = 100;
-            pantalla.y = 30;
+            pantalla.x = 51;
+            pantalla.y = 21;
+            //pantalla.x = 100;
+            //pantalla.y = 30;
             Console.SetWindowSize(pantalla.x + 2, pantalla.y + 10);
             Random rand = new Random();
             
@@ -28,11 +28,11 @@ namespace Snake
                 Snake snake = new Snake();
                 snake.colorCabeza = ConsoleColor.Cyan;
                 snake.colorCuerpo = ConsoleColor.DarkBlue;
-                snake.posicion.x = rand.Next(1, 30);
-                snake.posicion.y = rand.Next(1, 10);
+                snake.posicion.x = rand.Next(1, pantalla.x - 10);
+                snake.posicion.y = rand.Next(1, pantalla.y - 10);
 
                 Comida comida = new Comida();
-                comida.GenerarPosicion(snake);
+                comida.GenerarPosicion(snake, pantalla);
 
                 Juego juego = new Juego(pantalla, muros, snake, comida);
                 juego.Iniciar();
@@ -53,6 +53,7 @@ namespace Snake
         private int puntuacion = 0;
         private bool jugando;
         private int fps = 120;
+
         public Juego(Vector2D tamaño, Snake snake, Comida comida)
         {
             this.pantalla = tamaño;
@@ -147,8 +148,9 @@ namespace Snake
                 Console.Beep();
                 puntuacion++;
                 MostrarPuntuacion();
-                comida.GenerarPosicion(snake);
+                comida.GenerarPosicion(snake, pantalla);
                 comida.Dibujar();
+                VerificarCambioDeVelocidad();
             }
             else if (snake.cuerpo.Contains(posicionFutura))
             {
@@ -166,7 +168,6 @@ namespace Snake
             Console.WriteLine(txtPuntuacion);
             Console.ResetColor();
         }
-
         private void CuentaAtras()
         {
             int x = (pantalla.x + 1) / 2;
@@ -218,6 +219,14 @@ namespace Snake
             Console.SetCursorPosition(x - 3, y + 2);
             Console.Write("   ");
             Console.Beep(880, 500);
+        }
+
+        private void VerificarCambioDeVelocidad()
+        {
+            if ((puntuacion / 10 == 1) && (puntuacion <= 80))
+            {
+                fps -= 10;
+            }
         }
     }
     public class Muros
@@ -329,12 +338,12 @@ namespace Snake
         public char sprite = '*';
         public ConsoleColor color = ConsoleColor.Red;
         public Vector2D posicion = new Vector2D();
-        public void GenerarPosicion(Snake snake)
+        public void GenerarPosicion(Snake snake, Vector2D pantalla)
         {
             Random rand = new Random();
-            posicion.x = rand.Next(1, 40);
-            posicion.y = rand.Next(1, 10);
-            if (snake.cuerpo.Contains(posicion)) GenerarPosicion(snake);
+            posicion.x = rand.Next(1, pantalla.x - 10);
+            posicion.y = rand.Next(1, pantalla.y - 10);
+            if (snake.cuerpo.Contains(posicion)) GenerarPosicion(snake, pantalla);
         }
         public void Dibujar()
         {
