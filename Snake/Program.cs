@@ -9,6 +9,10 @@ namespace Snake
     {
         static void Main(string[] args)
         {
+            /*
+             * JUEGO DEL SNAKE 
+             * - ALDO HASSIEL
+            */
             Console.Title = "Snake";
             Vector2D pantalla;
             pantalla.x = 51;
