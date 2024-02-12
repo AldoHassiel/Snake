@@ -227,9 +227,9 @@ namespace Snake
 
         private void VerificarCambioDeVelocidad()
         {
-            if ((puntuacion / 10 == 1) && (puntuacion <= 80))
+            if ((puntuacion % 10 == 0) && (puntuacion <= 80))
             {
-                fps -= 10;
+                fps -= 5;
             }
         }
     }
